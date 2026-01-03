@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  HOST
+  SEEKER
+  ADMIN
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  role      Role
+  name      String
+  email     String?  @unique
+  phone     String?  @unique
+  password  String
+  isActive  Boolean  @default(true)
+
+  hostProfile   HostProfile?
+  seekerProfile SeekerProfile?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/* ---------------- HOST ---------------- */
+
+model HostProfile {
+  id            Int    @id @default(autoincrement())
+  userId        Int    @unique
+  companyName   String?
+  profilePhoto  String?
+  country       String
+  state         String
+  city          String
+
+  bankName      String
+  accountName   String
+  accountNumber String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+/* ---------------- SEEKER ---------------- */
+
+model SeekerProfile {
+  id            Int    @id @default(autoincrement())
+  userId        Int    @unique
+  profilePhoto  String?
+  country       String
+  state         String
+  city          String
+
+  experience    Int
+  jobTitle      String
+
+  bankName      String
+  accountName   String
+  accountNumber String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
