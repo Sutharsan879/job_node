@@ -58,6 +58,12 @@ const app = express();
 
 // middlewares
 app.use(express.json());
+app.get("/", (req, res) => {
+  res.status(200).json({
+    status: "OK",
+    message: "Job Node API is running",
+  });
+});
 
 // routes
 // app.use("/api/auth", authRoutes);
