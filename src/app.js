@@ -32,22 +32,35 @@
 
 // export default app;
 
-const express = require("express");
-const cors = require("cors");
+// const express = require("express");
+// const cors = require("cors");
 
-const authRoutes = require("./routes/auth.routes");
-const jobRoutes = require("./routes/job.routes");
+// const authRoutes = require("./routes/auth.routes");
+// const jobRoutes = require("./routes/job.routes");
+
+// const app = express();
+
+// app.use(cors({ origin: true }));
+// app.use(express.json());
+
+// app.get("/", (req, res) => {
+//   res.json({ status: "API running" });
+// });
+
+// app.use("/api/auth", authRoutes);
+// app.use("/api/jobs", jobRoutes);
+
+// module.exports = app;
+
+import express from "express";
 
 const app = express();
 
-app.use(cors({ origin: true }));
+// middlewares
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.json({ status: "API running" });
-});
+// routes
+// app.use("/api/auth", authRoutes);
+// app.use("/api/jobs", jobRoutes);
 
-app.use("/api/auth", authRoutes);
-app.use("/api/jobs", jobRoutes);
-
-module.exports = app;
+export default app;
