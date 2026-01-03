@@ -66,7 +66,7 @@ app.get("/", (req, res) => {
 });
 
 // routes
-// app.use("/api/auth", authRoutes);
-// app.use("/api/jobs", jobRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/jobs", jobRoutes);
 
 export default app;
