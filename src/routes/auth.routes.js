@@ -1,16 +1,23 @@
+
 import { Router } from "express";
 import {
-  login,
-  register,
-  verifyOtp,
-  forgotPassword,
-} from "../controllers/auth.controller.js";
+  hostRegister,
+  hostLogin,
+} from "../controllers/host.auth.controller.js";
+
+import {
+  seekerRegister,
+  seekerLogin,
+} from "../controllers/seeker.auth.controller.js";
 
 const router = Router();
 
-router.post("/login", login);
-router.post("/register", register);
-router.post("/verify-otp", verifyOtp);
-router.post("/forgot-password", forgotPassword);
+// HOST
+router.post("/host/register", hostRegister);
+router.post("/host/login", hostLogin);
+
+// SEEKER
+router.post("/seeker/register", seekerRegister);
+router.post("/seeker/login", seekerLogin);
 
 export default router;

@@ -2,49 +2,72 @@ import bcrypt from "bcryptjs";
 import prisma from "../config/prisma.js";
 import { generateToken } from "../utils/jwt.js";
 
-export const registerHost = async (req, res) => {
-  const { name, email, password, phone, company } = req.body;
-
-  const existing = await prisma.host.findUnique({ where: { email } });
-  if (existing) {
-    return res.status(400).json({ message: "Host already exists" });
-  }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const host = await prisma.host.create({
-    data: {
+/* ---------------- HOST REGISTER ---------------- */
+export const hostRegister = async (req, res) => {
+  try {
+    const {
       name,
       email,
-      password: hashedPassword,
       phone,
-      company,
-    },
-  });
+      password,
+      country,
+      state,
+      city,
+      companyName,
+      bankName,
+      accountName,
+      accountNumber,
+    } = req.body;
 
-  res.status(201).json({
-    message: "Host registered successfully",
-    hostId: host.id,
-  });
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email,
+        phone,
+        password: hashedPassword,
+        role: "HOST",
+        hostProfile: {
+          create: {
+            companyName,
+            country,
+            state,
+            city,
+            bankName,
+            accountName,
+            accountNumber,
+          },
+        },
+      },
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Host registered successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
 };
 
-export const loginHost = async (req, res) => {
+/* ---------------- HOST LOGIN ---------------- */
+export const hostLogin = async (req, res) => {
   const { email, password } = req.body;
 
-  const host = await prisma.host.findUnique({ where: { email } });
-  if (!host) {
-    return res.status(404).json({ message: "Host not found" });
+  const user = await prisma.user.findUnique({ where: { email } });
+
+  if (!user || user.role !== "HOST") {
+    return res.status(401).json({ success: false, message: "Invalid credentials" });
   }
 
-  const isMatch = await bcrypt.compare(password, host.password);
+  const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    return res.status(401).json({ message: "Invalid credentials" });
+    return res.status(401).json({ success: false, message: "Invalid credentials" });
   }
 
-  const token = generateToken({ id: host.id, role: "HOST" });
+  const token = generateToken(user);
 
-  res.json({
-    message: "Host login successful",
-    token,
-  });
+  res.json({ success: true, token });
 };

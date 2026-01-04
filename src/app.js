@@ -77,8 +77,6 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
 
-app.use("/api/host", hostRoutes);
-app.use("/api/seeker", seekerRoutes);
 /* -------------------- 404 HANDLER -------------------- */
 app.use((req, res) => {
   res.status(404).json({
