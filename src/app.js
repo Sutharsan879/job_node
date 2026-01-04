@@ -51,13 +51,19 @@
 // app.use("/api/jobs", jobRoutes);
 
 // module.exports = app;
-
 import express from "express";
+
+// route imports
+import authRoutes from "./routes/auth.routes.js";
+import jobRoutes from "./routes/job.routes.js";
 
 const app = express();
 
-// middlewares
+/* -------------------- MIDDLEWARES -------------------- */
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+/* -------------------- HEALTH CHECK -------------------- */
 app.get("/", (req, res) => {
   res.status(200).json({
     status: "OK",
@@ -65,8 +71,16 @@ app.get("/", (req, res) => {
   });
 });
 
-// routes
+/* -------------------- API ROUTES -------------------- */
 app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
+
+/* -------------------- 404 HANDLER -------------------- */
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "API route not found",
+  });
+});
 
 export default app;
