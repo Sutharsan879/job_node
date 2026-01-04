@@ -56,6 +56,8 @@ import express from "express";
 // route imports
 import authRoutes from "./routes/auth.routes.js";
 import jobRoutes from "./routes/job.routes.js";
+import hostRoutes from "./routes/host.routes.js";
+import seekerRoutes from "./routes/seeker.routes.js";
 
 const app = express();
 
@@ -75,6 +77,8 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
 
+app.use("/api/host", hostRoutes);
+app.use("/api/seeker", seekerRoutes);
 /* -------------------- 404 HANDLER -------------------- */
 app.use((req, res) => {
   res.status(404).json({
